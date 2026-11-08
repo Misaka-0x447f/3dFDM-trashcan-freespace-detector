@@ -14,13 +14,13 @@ public:
   void begin();
 
   // R2 旋转 + 双色屏物理分区布局：
-  //   黄区（用户视觉 y=48..63）→ 距离 xx.x cm（靠右）
+  //   黄区（用户视觉 y=48..63）→ HX711 中位数原始计数（校准诊断）
   //   蓝区（用户视觉 y=0..45） → 大百分比 + %（靠右，允许 <0 / >100）
-  // 节流：百分比或距离变化（0.1cm 颗粒度）才刷。kInvalid 表示无效态。
-  void render(int16_t percent, float distanceCm);
+  // 节流：百分比或原始计数变化才刷。INT32_MIN 表示无有效读数。
+  void render(int16_t percent, int32_t raw);
 
 private:
   U8G2_SSD1306_128X64_NONAME_F_SW_I2C _u8g2;
   int16_t _lastPercent;
-  int16_t _lastDistDeci;  // 距离×10；INT16_MIN 表示 NAN
+  int32_t _lastRaw;
 };
